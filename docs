@@ -1,0 +1,131 @@
+📘 Educational Content Assistant
+Retrieval-Augmented Generation (RAG) Application
+
+  📌 Overview
+The Educational Content Assistant is an AI-powered RAG-based system that allows users to upload educational documents (PDFs) and ask questions.
+The assistant answers strictly based on the uploaded content, ensuring factual accuracy and preventing hallucinations.
+
+This system is designed to be:
+Lightweight
+Beginner-friendly
+Optimized for low-end hardware
+
+🧠 What is RAG?
+Retrieval-Augmented Generation (RAG) combines:
+Information Retrieval – Fetch relevant document chunks
+Text Generation – Generate answers using an LLM
+Instead of relying only on model memory, RAG grounds answers in real documents.
+
+🏗️ System Architecture
+High-Level Flow
+flowchart LR
+    User -->|Upload PDF| Frontend
+    User -->|Ask Question| Frontend
+    Frontend --> Backend
+    Backend -->|Extract Text| DocumentProcessor
+    DocumentProcessor -->|Chunks| VectorDB
+    Backend -->|Query| VectorDB
+    VectorDB -->|Relevant Chunks| Backend
+    Backend -->|Prompt + Context| LLM
+    LLM -->|Answer| Backend
+    Backend --> Frontend
+
+🧩 Core Components
+1️⃣ Frontend (React)
+PDF upload UI
+
+Question input box
+Chat-like answer display
+
+Conversation history
+2️⃣ Backend (FastAPI)
+
+API endpoints for:
+PDF upload
+
+Question answering
+Secure API key handling
+Orchestrates RAG pipeline
+
+3️⃣ Document Processor
+PDF text extraction
+Chunking text into smaller segments
+Metadata tagging (page number, source)
+
+4️⃣ Vector Database
+Stores document embeddings
+Enables semantic similarity search
+Returns top-k relevant chunks
+
+5️⃣ LLM (via OpenRouter / API)
+Receives:
+User question
+Retrieved document context
+
+  RAG Pipeline (Step-by-Step)
+    sequenceDiagram
+    participant U as User
+    participant F as Frontend
+    participant B as Backend
+    participant V as Vector DB
+    participant L as LLM
+    U->>F: Upload PDF
+    F->>B: Send PDF
+    B->>B: Extract & Chunk Text
+    B->>V: Store Embeddings
+    U->>F: Ask Question
+    F->>B: Send Question
+    B->>V: Retrieve Similar Chunks
+    V->>B: Relevant Context
+    B->>L: Prompt + Context
+    L->>B: Generated Answer
+    B->>F: Display Answer
+
+🛡️ Key Design Principles
+✔ Grounded Answers
+Model is restricted to document context
+Reduces hallucinations
+✔ Low Resource Usage
+Chunking + vector search reduces token load
+Runs on 4GB RAM / Intel i3
+✔ Secure API Handling
+API keys stored only on backend
+Never exposed to frontend
+
+📝 Sample Prompt Template
+You are an educational assistant.
+Answer the question ONLY using the provided context.
+If the answer is not present, say:
+"I could not find this information in the uploaded document."
+
+Context:
+{retrieved_chunks}
+Question:
+{user_question}
+
+📊 Advantages of This RAG System
+Accurate answers
+Document-specific knowledge
+Scalable to multiple PDFs
+Cost-efficient
+Ideal for students and educators
+
+⚠️ Limitations
+Cannot answer outside uploaded content
+Performance depends on document quality
+Large PDFs may require chunk tuning
+
+🚀 Future Enhancements
+Multi-document support
+Source citation per answer
+OCR for scanned PDFs
+User authentication
+Conversation memory per document
+
+  📚 Use Cases
+Exam preparation
+Lecture note Q&A
+Research paper assistance
+Internal knowledge base
+E-learning platforms
+Generates grounded responses
